@@ -21,33 +21,25 @@ today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
 
-# تغییر تیبل به workersInboundRequests1d
 query = """
-query GetWorkersAnalytics($accountTag: String!, $datetimeStart: String!, $datetimeEnd: String!) {
+query GetWorkersAnalytics($accountTag: String!) {
   viewer {
     accounts(filter: {accountTag: $accountTag}) {
       workersInvocationsAdaptive(
         limit: 10000, 
-        filter: {
-          datetime_geq: $datetimeStart,
-          datetime_leq: $datetimeEnd
-        }
-      ) {
-        sum {
-          requests
-          subrequests
-          errors
-        }
-      }
-    }
-  }
-}
+        ...
 """
 
+# Later in your request:
 variables = {
-    "accountId": CF_ACCOUNT_ID,
-    "date": today_date
+    "accountTag": str(os.getenv("CF_ACCOUNT_ID"))
 }
+
+response = requests.post(
+    url, 
+    headers=headers, 
+    json={"query": query, "variables": variables}
+)
 
 formatted_requests = "N/A"
 
