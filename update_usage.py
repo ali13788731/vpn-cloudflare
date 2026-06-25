@@ -12,10 +12,8 @@ headers = {
     "Content-Type": "application/json"
 }
 
-# کلاودفلر برای تیبل 1d به فرمت دقیق تاریخ نیاز دارد
 today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-# استفاده از دیتاسِت استاندارد ورکرها برای اکانت‌های رایگان
 query = """
 query GetWorkersMetrics($accountId: String!, $date: String!) {
   viewer {
@@ -49,7 +47,6 @@ try:
     else:
         accounts = res_data.get('data', {}).get('viewer', {}).get('accounts', [])
         if accounts:
-            # استخراج دیتا از تیبل جدید
             groups = accounts[0].get('workersInboundRequests1d', [])
             if groups:
                 requests_count = groups[0].get('sum', {}).get('requests', 0)
@@ -63,7 +60,6 @@ except Exception as e:
     print(f"❌ Python execution error: {e}")
     formatted_requests = "Script Error"
 
-# ساخت فایل HTML از صفر برای جلوگیری از حجیم شدن فایل
 html_content = f"""<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -94,7 +90,6 @@ html_content = f"""<!DOCTYPE html>
 </body>
 </html>"""
 
-# بازنویسی کامل فایل بدون استفاده از Regex
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
