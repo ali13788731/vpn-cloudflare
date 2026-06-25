@@ -7,11 +7,20 @@ on:
     types: [trigger-cron]
   workflow_dispatch:
 
+# دسترسی‌های لازم برای آپدیت Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# همزمانی برای جلوگیری از تداخل اجراها
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   update-dashboard:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -37,3 +46,16 @@ jobs:
           git add index.html
           git diff --quiet && git diff --staged --quiet || git commit -m "📊 Live stats updated"
           git push
+
+      # مرحله جدید: آماده‌سازی فایل‌ها برای صفحات گیت‌هاب
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # پوشه‌ای که index.html در آن قرار دارد
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
