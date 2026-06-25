@@ -1,35 +1,39 @@
-name: Update Cloudflare Usage
+name: CF HTML Monitor
 
 on:
   schedule:
-    - cron: '0 */1 * * *' # هر 1 ساعت یکبار اجرا می‌شود
-  workflow_dispatch: # امکان اجرای دستی را هم فراهم می‌کند
+    - cron: '*/10 * * * *' # اجرای داخلی گیت‌هاب (هر ۱۰ دقیقه - با احتمال کمی تاخیر)
+  repository_dispatch:
+    types: [trigger-cron] # برای شلیک دقیق ۱۰ دقیقه‌ای از سایت‌های واسط
+  workflow_dispatch: # اجرای دستی
 
 jobs:
-  update-readme:
+  update-dashboard:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-node-version: '3.x'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: pip install requests
+      - name: Install requests
+        run: pip install requests
 
-    - name: Run script
-      env:
-        CF_API_TOKEN: ${{ secrets::CF_API_TOKEN }}
-        CF_ACCOUNT_ID: ${{ secrets::CF_ACCOUNT_ID }}
-      run: python update_usage.py
+      - name: Run Monitor
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: python update_usage.py
 
-    - name: Commit and Push changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add README.md
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update Cloudflare usage stats [skip ci]"
-        git push
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.html
+          git diff --quiet && git diff --staged --quiet || git commit -m "📊 Live stats updated"
+          git push
