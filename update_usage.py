@@ -1,7 +1,6 @@
 import os
 import requests
-import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # ==========================================
 # ۱. دریافت متغیرهای محیطی
@@ -23,8 +22,9 @@ headers = {
     "Content-Type": "application/json"
 }
 
-# محاسبه تاریخ ۳۰ روز پیش برای فیلتر گرفتن اطلاعات (فرمت استاندارد ISO 8601)
-start_date = (datetime.utcnow() - timedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%SZ')
+# محاسبه تاریخ برای "امروز" (بامداد امروز به وقت UTC)
+now_utc = datetime.utcnow()
+start_date = now_utc.replace(hour=0, minute=0, second=0, microsecond=0).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 query = """
 query GetWorkersAnalytics($accountTag: string, $startDate: string) {
@@ -80,7 +80,7 @@ except (KeyError, IndexError) as e:
     requests_count = 0
     errors_count = 0
 
-print(f"📊 Requests: {requests_count} | Errors: {errors_count}")
+print(f"📊 Today's Requests: {requests_count} | Errors: {errors_count}")
 
 # ==========================================
 # ۵. ساخت فایل index.html با آمارهای جدید
@@ -121,7 +121,7 @@ html_content = f"""
             margin: 15px 0;
         }}
         .number-requests {{
-            color: #2ecc71;
+            color: #3498db;
             font-weight: bold;
             font-size: 28px;
         }}
@@ -140,21 +140,21 @@ html_content = f"""
 <body>
 
     <div class="card">
-        <h1>📊 آمار ۳۰ روز گذشته ورکر</h1>
+        <h1>📊 آمار امروز ورکر</h1>
         
         <div class="stat">
-            تعداد کل درخواست‌ها: <br>
+            تعداد درخواست‌ها (Today): <br>
             <span class="number-requests">{requests_count:,}</span>
         </div>
         
         <div class="stat">
-            تعداد خطاها: <br>
+            تعداد خطاها (Today): <br>
             <span class="number-errors">{errors_count:,}</span>
         </div>
 
         <div class="footer">
             آخرین بروزرسانی: <br>
-            {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
+            {now_utc.strftime('%Y-%m-%d %H:%M:%S')} UTC
         </div>
     </div>
 
