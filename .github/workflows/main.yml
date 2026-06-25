@@ -2,10 +2,10 @@ name: CF HTML Monitor
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # اجرای داخلی گیت‌هاب (هر ۱۰ دقیقه - با احتمال کمی تاخیر)
+    - cron: '*/30 * * * *'
   repository_dispatch:
-    types: [trigger-cron] # برای شلیک دقیق ۱۰ دقیقه‌ای از سایت‌های واسط
-  workflow_dispatch: # اجرای دستی
+    types: [trigger-cron]
+  workflow_dispatch:
 
 jobs:
   update-dashboard:
