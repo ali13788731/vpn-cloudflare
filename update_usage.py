@@ -14,11 +14,12 @@ headers = {
 
 today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
+# تغییر نام تیبل در کوئری به workersInboundRequestsAdaptive
 query = """
 query GetWorkersMetrics($accountId: String!, $date: String!) {
   viewer {
     accounts(filter: { accountTag: $accountId }) {
-      workersInboundRequests1d(limit: 1, filter: { date: $date }) {
+      workersInboundRequestsAdaptive(limit: 1, filter: { date: $date }) {
         sum {
           requests
         }
@@ -47,7 +48,8 @@ try:
     else:
         accounts = res_data.get('data', {}).get('viewer', {}).get('accounts', [])
         if accounts:
-            groups = accounts[0].get('workersInboundRequests1d', [])
+            # تغییر کلید استخراج دیتا به workersInboundRequestsAdaptive
+            groups = accounts[0].get('workersInboundRequestsAdaptive', [])
             if groups:
                 requests_count = groups[0].get('sum', {}).get('requests', 0)
                 formatted_requests = f"{requests_count:,}"
