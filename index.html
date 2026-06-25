@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> آمار کلودفلر</title>
+    <title>داشبورد آمار کلودفلر</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -56,60 +57,19 @@
         
         <div class="stat">
             تعداد درخواست‌ها (Today): <br>
-            <span class="number-requests" id="req-val">درحال دریافت...</span>
+            <span class="number-requests">24,845</span>
         </div>
         
         <div class="stat">
             تعداد خطاها (Today): <br>
-            <span class="number-errors" id="err-val">درحال دریافت...</span>
+            <span class="number-errors">3,623</span>
         </div>
 
         <div class="footer">
             آخرین بروزرسانی: <br>
-            <span id="time-val">...</span>
+            2026-06-25 21:11:07 UTC
         </div>
     </div>
-
-    <script>
-        // 🔴 لینک ورکری که در مرحله اول ساختید را اینجا جایگزین کنید
-        const API_URL = "https://cf-stats-api.your-name.workers.dev";
-
-        async function fetchStats() {
-            try {
-                // پارامتر t برای جلوگیری از کش شدن مرورگر اضافه شده است
-                const response = await fetch(API_URL + "?t=" + new Date().getTime());
-                const result = await response.json();
-                
-                const invocations = result.data.viewer.accounts[0].workersInvocationsAdaptive;
-                let reqCount = 0;
-                let errCount = 0;
-                
-                if(invocations && invocations.length > 0) {
-                    reqCount = invocations[0].sum.requests;
-                    errCount = invocations[0].sum.errors;
-                }
-                
-                // بروزرسانی مقادیر در صفحه
-                document.getElementById("req-val").innerText = reqCount.toLocaleString();
-                document.getElementById("err-val").innerText = errCount.toLocaleString();
-                
-                // بروزرسانی زمان
-                const now = new Date();
-                const timeString = now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
-                document.getElementById("time-val").innerText = timeString;
-
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                document.getElementById("time-val").innerText = "خطا در دریافت اطلاعات!";
-            }
-        }
-
-        // ۱. دریافت اطلاعات در لحظه‌ی باز شدن صفحه
-        fetchStats();
-        
-        // ۲. آپدیت خودکار اطلاعات هر ۵ ثانیه (۵۰۰۰ میلی‌ثانیه)
-        setInterval(fetchStats, 5000);
-    </script>
 
 </body>
 </html>
