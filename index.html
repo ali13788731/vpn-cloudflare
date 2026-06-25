@@ -1,29 +1,75 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد مصرف VPN</title>
+    <title>داشبورد آمار کلودفلر</title>
     <style>
-        body { font-family: Tahoma, Arial, sans-serif; background-color: #0f172a; color: #e2e8f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background-color: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; border: 1px solid #334155; width: 350px; }
-        h1 { font-size: 20px; margin-bottom: 25px; color: #38bdf8; }
-        .stat-box { background-color: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #1e293b; }
-        .label { font-size: 13px; color: #94a3b8; display: block; margin-bottom: 5px; }
-        .value { font-size: 24px; font-weight: bold; color: #f8fafc; }
-        .footer { font-size: 11px; color: #64748b; margin-top: 20px; direction: ltr; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background-color: #2a2a40;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #f39c12;
+        }
+        .stat {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+        .number-requests {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 28px;
+        }
+        .number-errors {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 28px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <h1>📊 وضعیت مصرف کلاودفلر امروز</h1>
+        <h1>📊 آمار ۳۰ روز گذشته ورکر</h1>
         
-        <div class="stat-box">
-            <span class="label">تعداد کل درخواست‌ها (Requests)</span>
-            <span class="value">API Error</span>
+        <div class="stat">
+            تعداد کل درخواست‌ها: <br>
+            <span class="number-requests">92,821</span>
         </div>
-        <div class="footer">Last Update: 2026-06-25 17:58:34 UTC</div>
         
+        <div class="stat">
+            تعداد خطاها: <br>
+            <span class="number-errors">21,119</span>
+        </div>
+
+        <div class="footer">
+            آخرین بروزرسانی: <br>
+            2026-06-25 18:03:11 UTC
+        </div>
     </div>
+
 </body>
 </html>
