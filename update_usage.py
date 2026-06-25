@@ -23,12 +23,20 @@ today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 # تغییر تیبل به workersInboundRequests1d
 query = """
-query GetWorkersMetrics($accountId: String!, $date: String!) {
+query GetWorkersAnalytics($accountTag: String!, $datetimeStart: String!, $datetimeEnd: String!) {
   viewer {
-    accounts(filter: { accountTag: $accountId }) {
-      workersInboundRequests1d(limit: 1, filter: { date: $date }) {
+    accounts(filter: {accountTag: $accountTag}) {
+      workersInvocationsAdaptive(
+        limit: 10000, 
+        filter: {
+          datetime_geq: $datetimeStart,
+          datetime_leq: $datetimeEnd
+        }
+      ) {
         sum {
           requests
+          subrequests
+          errors
         }
       }
     }
