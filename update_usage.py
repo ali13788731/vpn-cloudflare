@@ -14,12 +14,19 @@ headers = {
 
 today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-# تغییر نام تیبل در کوئری به workersInboundRequestsAdaptive
+
+
+
+
+
+
+
+# تغییر تیبل به workersInboundRequests1d
 query = """
 query GetWorkersMetrics($accountId: String!, $date: String!) {
   viewer {
     accounts(filter: { accountTag: $accountId }) {
-      workersInboundRequestsAdaptive(limit: 1, filter: { date: $date }) {
+      workersInboundRequests1d(limit: 1, filter: { date: $date }) {
         sum {
           requests
         }
@@ -48,8 +55,8 @@ try:
     else:
         accounts = res_data.get('data', {}).get('viewer', {}).get('accounts', [])
         if accounts:
-            # تغییر کلید استخراج دیتا به workersInboundRequestsAdaptive
-            groups = accounts[0].get('workersInboundRequestsAdaptive', [])
+            # تغییر کلید استخراج دیتا به workersInboundRequests1d
+            groups = accounts[0].get('workersInboundRequests1d', [])
             if groups:
                 requests_count = groups[0].get('sum', {}).get('requests', 0)
                 formatted_requests = f"{requests_count:,}"
@@ -57,6 +64,15 @@ try:
                 formatted_requests = "0"
         else:
             formatted_requests = "Auth/ID Error"
+
+
+
+
+
+
+
+
+
 
 except Exception as e:
     print(f"❌ Python execution error: {e}")
