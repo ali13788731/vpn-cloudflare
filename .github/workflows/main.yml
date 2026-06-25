@@ -1,0 +1,46 @@
+name: IRCF Edgetunnel Generator
+
+on:
+  schedule:
+    # اجرا هر ۶ ساعت یک‌بار
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate Configs
+        env:
+          WORKER_DOMAIN: ${{ secrets.WORKER_DOMAIN }}
+          WORKER_UUID: ${{ secrets.WORKER_UUID }}
+        run: python collector.py 
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add sub_*.txt
+          
+          if git diff --staged --quiet; then
+            echo "⚠️ No changes to commit."
+          else
+            git commit -m "🚀 Auto Update Configs: $(date +'%Y-%m-%d %H:%M')"
+            git push
+          fi
