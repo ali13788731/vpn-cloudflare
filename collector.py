@@ -6,9 +6,9 @@ from zoneinfo import ZoneInfo
 import jdatetime
 
 # ==========================================
-# 🚀 تنظیمات اختصاصی ورکر کلادفلر شما
+# 🚀 تنظیمات ورکر کلادفلر شما (از GitHub Secrets خوانده می‌شود)
 # ==========================================
-WORKER_DOMAIN = os.environ.get("WORKER_DOMAIN", "your-worker-name.your-subdomain.workers.dev")
+WORKER_DOMAIN = os.environ.get("WORKER_DOMAIN", "your-worker.workers.dev")
 WORKER_UUID = os.environ.get("WORKER_UUID", "00000000-0000-4000-8000-000000000000")
 
 # ==========================================
@@ -38,7 +38,7 @@ def get_persian_time():
 def generate_worker_vless(address, port, operator_name, time_tag):
     """ ساخت لینک VLESS با استفاده از دامنه‌های چرخشی """
     
-    # نام‌گذاری: 🚀 MyWorker [MCI] - Port:443 | 2026-06-25 12:00
+    # نام‌گذاری کانفیگ (مثال: 🚀 MyWorker [MCI] - Port:443 | 2026-06-25 12:00)
     config_name = f"🚀 MyWorker [{operator_name.upper()}] - Port:{port} | {time_tag}"
     
     query = urllib.parse.urlencode({
@@ -59,7 +59,7 @@ def main():
     time_tag = get_persian_time()
     print(f"⏰ Start building configs at: {time_tag}")
 
-    # پردازش برای هر اپراتور
+    # پردازش برای هر اپراتور به صورت مجزا
     for op_name, domain in OPERATORS.items():
         configs = []
         print(f"\n📡 Generating configs for {op_name.upper()} using {domain} ...")
@@ -72,13 +72,14 @@ def main():
         # ذخیره‌سازی در فایل‌های مجزا
         if configs:
             content_str = "\n".join(configs)
+            # تبدیل به فرمت Base64 برای لینک‌های سابسکریپشن
             encoded_content = base64.b64encode(content_str.encode('utf-8')).decode('utf-8')
             
-            # ذخیره فایل Base64
+            # ذخیره فایل رمزگذاری شده
             with open(f"sub_{op_name}.txt", "w", encoding="utf-8") as f:
                 f.write(encoded_content)
                 
-            # ذخیره فایل Raw
+            # ذخیره فایل متنی خام (برای مشاهده راحت در گیت‌هاب)
             with open(f"sub_{op_name}_raw.txt", "w", encoding="utf-8") as f:
                 f.write(content_str)
                 
