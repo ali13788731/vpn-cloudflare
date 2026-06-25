@@ -1,9 +1,9 @@
-name: IRCF Edgetunnel Generator
+name: Yebekhe + IRCF Generator
 
 on:
   schedule:
-    # اجرا هر ۶ ساعت یک‌بار
-    - cron: '0 */6 * * *'
+    # اجرا هر 3 ساعت یک‌بار
+    - cron: '0 */3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -27,9 +27,6 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Generate Configs
-        env:
-          WORKER_DOMAIN: ${{ secrets.WORKER_DOMAIN }}
-          WORKER_UUID: ${{ secrets.WORKER_UUID }}
         run: python collector.py 
 
       - name: Commit and Push changes
@@ -41,6 +38,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "⚠️ No changes to commit."
           else
-            git commit -m "🚀 Auto Update Configs: $(date +'%Y-%m-%d %H:%M')"
+            git commit -m "🚀 Auto Update from Yebekhe: $(date +'%Y-%m-%d %H:%M')"
             git push
           fi
